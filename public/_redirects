@@ -1,3 +1,9 @@
+# Cloudflare Pages redirects: https://developers.cloudflare.com/pages/configuration/redirects/
+#
+# The old GoDaddy site's URLs point to their closest new page, so links already
+# shared on Facebook or indexed by search engines keep working. Format:
+#   <old path>  <new path>  <status>
+
 /about-us                /about/                     301
 /information             /about/#contact             301
 /our-partners            /about/#partners            301

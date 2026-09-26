@@ -1,0 +1,140 @@
+---
+/**
+ * The live list of adoptable dogs, rendered by ShelterManager's embed script.
+ *
+ * Dogs are managed in the rescue's ShelterManager account, not in this repo:
+ * adding, editing or adopting out a dog there updates this list automatically.
+ *
+ * How it works: the script from `adoptablesScriptUrl` contains the current
+ * animal data and, on window load, writes its own markup into
+ * #asm3-adoptables. It reads its settings from the global `asm3_adoptable_*`
+ * variables below, so those must be defined before it runs.
+ */
+import { adoptablesScriptUrl, adoptablesPageUrl, petfinderUrl } from "../data/site";
+---
+<div id="asm3-adoptables" class="adoptables">
+  <p class="muted">Loading our dogs…</p>
+</div>
+<noscript>
+  <p><a href={adoptablesPageUrl}>See the list of adoptable dogs</a></p>
+</noscript>
+<p class="small muted note">You can also find our dogs on <a href={petfinderUrl}>Petfinder</a>.</p>
+
+<script is:inline>
+  // Settings read by the ShelterManager embed. Must be globals (var, not let/const).
+  var asm3_adoptable_filters = "agegroup sex";         // filter dropdowns to show; also the tags under each name
+  var asm3_adoptable_iframe = false;                   // open profiles in a new tab, not an overlay
+  var asm3_adoptable_fullsize_images = true;           // its thumbnails are too small for our cards
+  var asm3_adoptable_translations = {
+    "(any age)": "Any age",
+    "(any sex)": "Any sex",
+    "No results": "No dogs match those filters.",
+  };
+  // Adds the breed under each dog's name. HTML-escaped because it's inserted as markup.
+  var asm3_adoptable_extra = function (animal) {
+    var d = document.createElement("div");
+    d.textContent = animal.BREEDNAME || "";
+    return '<div class="asm3-adoptable-breed">' + d.innerHTML + "</div>";
+  };
+</script>
+<script is:inline src={adoptablesScriptUrl}></script>
+<script is:inline>
+  // Accessibility and performance fixes for the markup the embed generates,
+  // applied whenever it (re)renders the list (on load and on each filter change).
+  (function () {
+    var host = document.getElementById("asm3-adoptables");
+    var labels = { "asm3-select-agegroup": "Filter by age", "asm3-select-sex": "Filter by sex" };
+    new MutationObserver(function () {
+      Object.keys(labels).forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el && !el.hasAttribute("aria-label")) el.setAttribute("aria-label", labels[id]);
+      });
+      host.querySelectorAll("img.asm3-adoptable-thumbnail:not([loading])").forEach(function (img) {
+        img.alt = "";             // the dog's name is printed right below, inside the same link
+        img.loading = "lazy";     // full-size photos; only load the ones scrolled into view
+        img.decoding = "async";
+      });
+    }).observe(host, { childList: true, subtree: true });
+  })();
+</script>
+
+<style is:global>
+  /*
+   * Restyles the embed's markup to match the site. The embed writes inline
+   * styles, hence the few !important overrides. These selectors depend on
+   * ShelterManager's (undocumented) asm3-* class names and element order;
+   * if the list suddenly looks unstyled, check whether its markup changed.
+   *
+   * Card structure the embed produces:
+   *   .asm3-adoptable-item
+   *     a.asm3-adoptable-link > div > img.asm3-adoptable-thumbnail
+   *                           > .asm3-adoptable-name
+   *     .asm3-adoptable-tagline > span.asm3-adoptable-tag (age group, sex)
+   *     .asm3-adoptable-breed   (added by asm3_adoptable_extra above)
+   */
+  /* Reserve a screen of space so the list rendering in late doesn't shove the
+     rest of the page around (layout shift). */
+  .adoptables { min-height: 100svh; }
+  .adoptables #asm3-adoptable-filters {
+    text-align: left !important;
+    padding: 0 !important;
+    margin: 0 0 1.5rem;
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .adoptables select {
+    font: 1rem var(--sans);
+    padding: 0.55rem 0.8rem;
+    border: 2px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .adoptables .asm3-adoptable-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 1.5rem;
+  }
+  .adoptables .asm3-adoptable-item {
+    display: flex !important;
+    flex-direction: column;
+    text-align: left !important;
+    padding: 0 !important;
+    max-width: none;
+    background: var(--board);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .adoptables .asm3-adoptable-link { text-decoration: none; color: var(--ink); display: block; }
+  .adoptables .asm3-adoptable-link > div:first-child { position: relative; }
+  .adoptables .asm3-adoptable-thumbnail {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    background: var(--line);
+  }
+  .adoptables .asm3-adoptable-reserved::after {
+    content: "Adoption pending";
+    position: absolute; left: 0.75rem; top: 0.75rem;
+    background: var(--hay); color: var(--ink);
+    font-weight: 700; font-size: 0.9rem;
+    padding: 0.25rem 0.6rem; border-radius: var(--radius);
+  }
+  .adoptables .asm3-adoptable-name {
+    font: 700 1.45rem/1.15 var(--slab);
+    padding: 1rem 1.2rem 0.2rem;
+    color: var(--denim-deep);
+  }
+  .adoptables .asm3-adoptable-link:hover .asm3-adoptable-name { text-decoration: underline; }
+  .adoptables .asm3-adoptable-breed { padding: 0 1.2rem; font-size: 1rem; }
+  .adoptables .asm3-adoptable-tagline { display: flex; flex-wrap: wrap; order: 3; padding: 0.2rem 1.2rem 1.3rem; font-size: 1rem; color: var(--muted); }
+  .adoptables .asm3-adoptable-tag + .asm3-adoptable-tag::before { content: ",\00a0"; }
+  .adoptables .asm3-adoptable-no-results { grid-column: 1 / -1; }
+  @media (max-width: 40rem) {
+    .adoptables .asm3-adoptable-list { grid-template-columns: repeat(2, 1fr); gap: 0.9rem; }
+    .adoptables .asm3-adoptable-name { font-size: 1.2rem; padding: 0.75rem 0.8rem 0.15rem; }
+    .adoptables .asm3-adoptable-breed { padding: 0 0.8rem; font-size: 0.9rem; }
+    .adoptables .asm3-adoptable-tagline { padding: 0.15rem 0.8rem 1rem; font-size: 0.9rem; }
+  }
+</style>

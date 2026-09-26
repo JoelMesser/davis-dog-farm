@@ -1,6 +1,23 @@
-/* Davis Dog Farm — shared styles
-   Palette pulled from the farm's own sign: whitewashed boards, charcoal lettering,
-   and the blue painted dogs. Hay yellow is reserved for "Donate". */
+/*
+ * Davis Dog Farm: site-wide styles (imported once, in src/layouts/Base.astro).
+ *
+ * Palette comes from the farm's own sign: whitewashed boards, charcoal
+ * lettering, and the blue painted dogs. Hay yellow is reserved for Donate.
+ *
+ * Building blocks used across the pages:
+ *   .wrap                  centered content column with side gutters
+ *   .section               vertical rhythm for a full-width band; add a
+ *                          background with .section-white / -sky / -ink
+ *   .page-head             intro band at the top of inner pages
+ *   .split                 two columns, text + image; .flip puts the image
+ *                          first on desktop; img.tall crops to portrait
+ *   .actions               a row of .btn links (.btn-primary / -donate / -plain)
+ *   .muted .small .note    secondary text, smaller text, a 1rem top gap
+ *
+ * Page-specific pieces (.hero, .lineup, .ways, .steps, .fees, .story,
+ * .memorial, .partners, .contact-grid) are further down, in page order.
+ * Styles for the adoptable-dogs embed live in src/components/Adoptables.astro.
+ */
 
 :root {
   --board: #f1f2ee;
@@ -14,8 +31,9 @@
   --hay: #f2b53a;
   --hay-deep: #d99a17;
 
-  --slab: "Zilla Slab", Rockwell, "Roboto Slab", Georgia, serif;
-  --sans: "Public Sans", "Segoe UI", system-ui, sans-serif;
+  /* --font-slab and --font-sans are defined by Astro's fonts config (astro.config.mjs). */
+  --slab: var(--font-slab), Rockwell, Georgia, serif;
+  --sans: var(--font-sans), "Segoe UI", system-ui, sans-serif;
 
   --wrap: 72rem;
   --gutter: clamp(1rem, 4vw, 2.5rem);
@@ -59,12 +77,15 @@ h3 { font-size: 1.4rem; }
 
 p { margin: 0 0 1em; max-width: 38rem; }
 
+/* ---------- Layout primitives ---------- */
+
 .wrap {
   max-width: var(--wrap);
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
 
+/* "Skip to content" link, visible only when focused with the keyboard. */
 .skip {
   position: absolute; left: -999px; top: 0;
   background: var(--ink); color: #fff; padding: 0.5rem 1rem; z-index: 10;
@@ -104,11 +125,14 @@ p { margin: 0 0 1em; max-width: 38rem; }
   font-size: 1rem;
   border-radius: var(--radius);
 }
-.nav a:hover { background: var(--sky); color: var(--ink); }
+.nav a:hover { background: var(--sky); }
 .nav a[aria-current="page"] { color: var(--denim-deep); box-shadow: inset 0 -3px 0 var(--denim); border-radius: 0; }
 .nav .nav-donate a { background: var(--hay); margin-left: 0.4rem; }
 .nav .nav-donate a:hover { background: var(--hay-deep); }
 
+/* Below 54rem the nav collapses behind a Menu button. The collapse only
+   applies with the .js class (set in Base.astro's <head>), so the links stay
+   visible if JavaScript is off. */
 .menu-toggle { display: none; }
 
 @media (max-width: 54rem) {
@@ -151,8 +175,26 @@ p { margin: 0 0 1em; max-width: 38rem; }
 
 /* ---------- Home hero ---------- */
 
-.hero { padding-block: clamp(2.5rem, 7vw, 5rem) 0; }
+.hero { padding-block: clamp(2.5rem, 7vw, 5rem); }
 .hero h1 { max-width: 12ch; }
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
+}
+/* The farm's round badge. Its square source has a pale background, so it's clipped to a circle. */
+.hero-logo {
+  width: clamp(16rem, 30vw, 24rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 6px var(--paper), 0 0 0 7px var(--line);
+}
+@media (max-width: 48rem) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-logo { order: -1; width: 9rem; }
+}
 .hero .lede { font-size: 1.3rem; max-width: 34rem; color: var(--muted); }
 
 /* The dog line-up: real rescues from the farm, shoulder to shoulder like a fence line. */
@@ -172,18 +214,16 @@ p { margin: 0 0 1em; max-width: 38rem; }
 .lineup figure {
   margin: 0;
   scroll-snap-align: start;
-  position: relative;
 }
 .lineup img {
   width: 100%;
   aspect-ratio: 3 / 4;
   object-fit: cover;
-  border-radius: var(--radius) var(--radius) 0 0;
+  border-radius: var(--radius);
 }
-.lineup figure:nth-child(even) img { aspect-ratio: 3 / 4.4; }
-.lineup { align-items: end; }
 @media (max-width: 54rem) { .lineup { grid-auto-columns: 42%; } }
 
+/* The page's one entrance animation: the photos rise in, left to right. */
 @media (prefers-reduced-motion: no-preference) {
   .lineup figure { animation: rise 700ms cubic-bezier(.2,.7,.2,1) both; }
   .lineup figure:nth-child(2) { animation-delay: 80ms; }
@@ -191,11 +231,9 @@ p { margin: 0 0 1em; max-width: 38rem; }
   .lineup figure:nth-child(4) { animation-delay: 240ms; }
   .lineup figure:nth-child(5) { animation-delay: 320ms; }
   .lineup figure:nth-child(6) { animation-delay: 400ms; }
-  .lineup figure:nth-child(7) { animation-delay: 480ms; }
   @keyframes rise { from { transform: translateY(2.5rem); opacity: 0; } }
 }
 
-.ground { height: 0.9rem; background: var(--ink); }
 
 /* ---------- Sections ---------- */
 
@@ -203,7 +241,7 @@ p { margin: 0 0 1em; max-width: 38rem; }
 .section-white { background: var(--paper); }
 .section-sky { background: var(--sky); }
 .section-ink { background: var(--ink); color: #eef0ec; }
-.section-ink a { color: #fff; }
+.section-ink a:not(.btn) { color: #fff; }
 .section-ink .muted { color: #b9c0bd; }
 
 .page-head { padding-block: clamp(2.5rem, 6vw, 4rem) clamp(1.5rem, 4vw, 2.5rem); }
@@ -211,6 +249,7 @@ p { margin: 0 0 1em; max-width: 38rem; }
 
 .muted { color: var(--muted); }
 .small { font-size: 0.95rem; }
+.note { margin-top: 1rem; }
 
 .split {
   display: grid;
@@ -265,29 +304,6 @@ p { margin: 0 0 1em; max-width: 38rem; }
 .fees .highlight th, .fees .highlight td { background: var(--sky); }
 .fees .highlight th { padding-left: 0.75rem; }
 
-/* Dog profiles */
-.dogs {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
-}
-.dog { background: var(--paper); border-radius: var(--radius); overflow: hidden; }
-.dog img { aspect-ratio: 1; object-fit: cover; width: 100%; }
-.dog div { padding: 1rem 1.2rem 1.3rem; }
-.dog h3 { margin-bottom: 0.2em; }
-.dog p { font-size: 1rem; margin: 0; }
-
-.petfinder-callout {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem;
-  background: var(--ink); color: #fff;
-  padding: 1.5rem clamp(1.25rem, 3vw, 2rem);
-  border-radius: var(--radius);
-  margin-top: 2rem;
-}
-.petfinder-callout p { margin: 0; font-size: 1.15rem; }
-.petfinder-callout strong { font-family: var(--slab); font-size: 1.5rem; display: block; }
-
 /* Recipient stories (Hope for Healing) */
 .story {
   display: grid; grid-template-columns: 16rem 1fr; gap: clamp(1.25rem, 3vw, 2.5rem);
@@ -307,7 +323,7 @@ p { margin: 0 0 1em; max-width: 38rem; }
 .memorial figcaption { text-align: center; font-family: var(--slab); font-weight: 700; font-size: 1.25rem; margin-top: 0.6rem; }
 @media (max-width: 40rem) { .memorial { grid-template-columns: repeat(2, 1fr); } }
 
-/* Notices */
+/* Highlighted callout (e.g. "currently only accepting…") */
 .notice {
   border-left: 5px solid var(--hay);
   background: var(--paper);
@@ -317,6 +333,7 @@ p { margin: 0 0 1em; max-width: 38rem; }
 }
 .notice p:last-child { margin-bottom: 0; }
 
+/* Get involved + About */
 .checklist { padding-left: 1.2rem; max-width: 38rem; }
 .checklist li { margin-bottom: 0.4rem; }
 
@@ -326,11 +343,9 @@ p { margin: 0 0 1em; max-width: 38rem; }
 .partners h3 { color: var(--denim-deep); margin-bottom: 0.2em; }
 .partners p { font-size: 1rem; }
 
-.contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 2rem; }
 .contact-grid h3 { font-size: 1.15rem; margin-bottom: 0.3em; }
 @media (max-width: 48rem) { .contact-grid { grid-template-columns: 1fr; } }
-
-.map { width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: var(--radius); margin-top: 2rem; background: var(--line); }
 
 /* ---------- Footer ---------- */
 
@@ -344,69 +359,3 @@ p { margin: 0 0 1em; max-width: 38rem; }
 .footer-brand img { width: 72px; height: 72px; border-radius: 50%; flex: none; }
 .legal { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid #3c4244; font-size: 0.9rem; color: #a9b0ad; }
 @media (max-width: 48rem) { .footer-grid { grid-template-columns: 1fr; } }
-
-/* ---------- Live adoptable dogs (ShelterManager embed) ----------
-   The embed writes its own markup and inline styles; these rules restyle it to match. */
-
-.adoptables #asm3-adoptable-filters {
-  text-align: left !important;
-  padding: 0 !important;
-  margin: 0 0 1.5rem;
-  display: flex !important;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-}
-.adoptables select {
-  font: 1rem var(--sans);
-  padding: 0.55rem 0.8rem;
-  border: 2px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--paper);
-  color: var(--ink);
-}
-.adoptables .asm3-adoptable-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-  gap: 1.5rem;
-}
-.adoptables .asm3-adoptable-item {
-  display: flex !important;
-  flex-direction: column;
-  text-align: left !important;
-  padding: 0 !important;
-  max-width: none;
-  background: var(--board);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-.adoptables .asm3-adoptable-link { text-decoration: none; color: var(--ink); display: block; }
-.adoptables .asm3-adoptable-link > div:first-child { position: relative; }
-.adoptables .asm3-adoptable-thumbnail {
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  background: var(--line);
-}
-.adoptables .asm3-adoptable-reserved::after {
-  content: "Adoption pending";
-  position: absolute; left: 0.75rem; top: 0.75rem;
-  background: var(--hay); color: var(--ink);
-  font-weight: 700; font-size: 0.9rem;
-  padding: 0.25rem 0.6rem; border-radius: var(--radius);
-}
-.adoptables .asm3-adoptable-name {
-  font: 700 1.45rem/1.15 var(--slab);
-  padding: 1rem 1.2rem 0.2rem;
-  color: var(--denim-deep);
-}
-.adoptables .asm3-adoptable-link:hover .asm3-adoptable-name { text-decoration: underline; }
-.adoptables .asm3-adoptable-breed { padding: 0 1.2rem; font-size: 1rem; }
-.adoptables .asm3-adoptable-tagline { display: flex; flex-wrap: wrap; order: 3; padding: 0.2rem 1.2rem 1.3rem; font-size: 1rem; color: var(--muted); }
-.adoptables .asm3-adoptable-tag + .asm3-adoptable-tag::before { content: ",\00a0"; }
-.adoptables .asm3-adoptable-no-results { grid-column: 1 / -1; }
-@media (max-width: 40rem) {
-  .adoptables .asm3-adoptable-list { grid-template-columns: repeat(2, 1fr); gap: 0.9rem; }
-  .adoptables .asm3-adoptable-name { font-size: 1.2rem; padding: 0.75rem 0.8rem 0.15rem; }
-  .adoptables .asm3-adoptable-breed { padding: 0 0.8rem; font-size: 0.9rem; }
-  .adoptables .asm3-adoptable-tagline { padding: 0.15rem 0.8rem 1rem; font-size: 0.9rem; }
-}

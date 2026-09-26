@@ -1,28 +1,54 @@
 ---
+/**
+ * Home page (/).
+ * Sections: hero with logo and dog line-up → how adoption works (summary of
+ * the steps on /adopt/) → three ways to help → Hope for Healing teaser →
+ * visits by appointment.
+ *
+ * Images are imported so Astro can resize them and convert them to WebP at
+ * build time. `width` is about 2× the largest size each one is shown at.
+ * The first three line-up photos load eagerly because they're above the fold.
+ */
 import Base from "../layouts/Base.astro";
+import { Image } from "astro:assets";
+import logo from "../assets/images/logo.jpg";
+import { donateUrl, mailto, email } from "../data/site";
+import dogBulldog from "../assets/images/dog-bulldog.jpg";
+import khaos from "../assets/images/khaos.jpg";
+import dogSmallBrown from "../assets/images/dog-small-brown.jpg";
+import dogAutumnLeaves from "../assets/images/dog-autumn-leaves.jpg";
+import dogRottie from "../assets/images/dog-rottie.jpg";
+import dogBandana from "../assets/images/dog-bandana.jpg";
+import puppiesWithKid from "../assets/images/puppies-with-kid.jpg";
+import trainingWalk from "../assets/images/training-walk.jpg";
+import adoptMeSnow from "../assets/images/adopt-me-snow.jpg";
+import zoey from "../assets/images/zoey.jpg";
+import sign from "../assets/images/sign.jpg";
 ---
 <Base
   title="Davis Dog Farm | All-breed dog rescue in Grantville, PA"
   description="Davis Dog Farm is a foster-based, all-breed 501(c)(3) dog rescue in Grantville, Pennsylvania. Adopt, foster, volunteer, or donate."
 >
   <section class="hero">
-    <div class="wrap">
-      <h1>Rescue. Recover. Rehome.</h1>
-      <p class="lede">We’re an all-breed dog rescue in Grantville, PA. Our dogs live with foster families, not in kennels, until they find a home of their own.</p>
-      <div class="actions">
-        <a class="btn btn-primary" href="/adopt/">Meet our dogs</a>
-        <a class="btn btn-plain" href="/get-involved/#foster">Become a foster</a>
+    <div class="wrap hero-grid">
+      <div>
+        <h1>Rescue. Recover. Rehome.</h1>
+        <p class="lede">We’re an all-breed dog rescue in Grantville, PA. Our dogs live with foster families, not in kennels, until they find a home of their own.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="/adopt/">Meet our dogs</a>
+          <a class="btn btn-plain" href="/get-involved/#foster">Become a foster</a>
+        </div>
       </div>
+      <Image class="hero-logo" src={logo} alt="The Davis Dog Farm logo: Rescue, Recover, Rehome. All breed dog rescue, established 2021." width={500} loading="eager" />
     </div>
-    <div class="lineup" aria-label="Some of our rescue dogs">
-      <figure><img src="/images/dog-bulldog.jpg" alt="A white and brown bulldog looking up" width="900" height="1200"></figure>
-      <figure><img src="/images/khaos.jpg" alt="Khaos, a Belgian Malinois, sitting in a field" width="900" height="1200"></figure>
-      <figure><img src="/images/dog-small-brown.jpg" alt="A small brown dog resting on a checkered bed" width="900" height="1200"></figure>
-      <figure><img src="/images/dog-autumn-leaves.jpg" alt="A happy black and tan dog standing in autumn leaves" width="900" height="1200"></figure>
-      <figure><img src="/images/dog-rottie.jpg" alt="A Rottweiler looking up with soulful eyes" width="900" height="1200"></figure>
-      <figure><img src="/images/dog-bandana.jpg" alt="A young Malinois in a blue bandana on a patio chair" width="900" height="1093"></figure>
+    <div class="lineup" role="region" aria-label="Some of our rescue dogs" tabindex="0">
+      <figure><Image src={dogBulldog} alt="A white and brown bulldog looking up" width={450} fetchpriority="high" loading="eager" /></figure>
+      <figure><Image src={khaos} alt="Khaos, a Belgian Malinois, sitting in a field" width={450} loading="eager" /></figure>
+      <figure><Image src={dogSmallBrown} alt="A small brown dog resting on a checkered bed" width={450} loading="eager" /></figure>
+      <figure><Image src={dogAutumnLeaves} alt="A happy black and tan dog standing in autumn leaves" width={450} /></figure>
+      <figure><Image src={dogRottie} alt="A Rottweiler looking up with soulful eyes" width={450} /></figure>
+      <figure><Image src={dogBandana} alt="A young Malinois in a blue bandana on a patio chair" width={450} /></figure>
     </div>
-    <div class="ground" aria-hidden="true"></div>
   </section>
 
   <section class="section section-white">
@@ -47,22 +73,22 @@ import Base from "../layouts/Base.astro";
       <h2>Not ready to adopt? You can still help.</h2>
       <div class="ways">
         <article id="foster">
-          <img src="/images/puppies-with-kid.jpg" alt="A smiling child holding two fluffy puppies" width="900" height="1200" loading="lazy">
+          <Image src={puppiesWithKid} alt="A smiling child holding two fluffy puppies" width={700} />
           <h3>Foster a dog</h3>
           <p>Most of our dogs live in foster homes. You give a dog a safe place to recover and learn what family life is like until they’re adopted.</p>
           <a class="btn btn-primary" href="/get-involved/#foster">Learn about fostering</a>
         </article>
         <article>
-          <img src="/images/training-walk.jpg" alt="A volunteer walking a small black dog" width="900" height="1200" loading="lazy">
+          <Image src={trainingWalk} alt="A volunteer walking a small black dog" width={700} />
           <h3>Volunteer</h3>
           <p>We need help with transport, events, dog walking, and cleaning and organizing.</p>
           <a class="btn btn-primary" href="/get-involved/#volunteer">Volunteer with us</a>
         </article>
         <article>
-          <img src="/images/adopt-me-snow.jpg" alt="A dog in an Adopt Me vest walking in the snow" width="828" height="552" loading="lazy">
+          <Image src={adoptMeSnow} alt="A dog in an Adopt Me vest walking in the snow" width={700} />
           <h3>Donate</h3>
           <p>As a 501(c)(3), we run on donations. Every dollar goes toward food, medical care and training for dogs in our care.</p>
-          <a class="btn btn-donate" href="https://www.paypal.com/donate?hosted_button_id=BNYCE2ETKYDN6">Donate with PayPal</a>
+          <a class="btn btn-donate" href={donateUrl}>Donate with PayPal</a>
         </article>
       </div>
     </div>
@@ -78,7 +104,7 @@ import Base from "../layouts/Base.astro";
           <a class="btn btn-primary" href="/hope-for-healing/">Read their stories</a>
         </div>
       </div>
-      <img class="tall" src="/images/zoey.jpg" alt="Zoey after her eye surgery, resting in her foster’s lap" width="720" height="960" loading="lazy">
+      <Image src={zoey} alt="Zoey after her eye surgery, resting in her foster’s lap" width={720} class="tall" />
     </div>
   </section>
 
@@ -87,9 +113,9 @@ import Base from "../layouts/Base.astro";
       <div>
         <h2>Visits are by appointment only</h2>
         <p>Please don’t come to any of our locations without an appointment. We’re busy caring for the dogs, and appointments keep them and our staff safe.</p>
-        <p>If you’d like to meet a dog, <a href="/adopt/">apply first</a> and we’ll contact you. For anything else, email <a href="mailto:info@davisdogfarm.com">info@davisdogfarm.com</a>.</p>
+        <p>If you’d like to meet a dog, <a href="/adopt/">apply first</a> and we’ll contact you. For anything else, email <a href={mailto}>{email}</a>.</p>
       </div>
-      <img src="/images/sign.jpg" alt="Painted wooden Davis Dog Farm sign with blue dogs" width="421" height="312" loading="lazy">
+      <Image src={sign} alt="Painted wooden Davis Dog Farm sign with blue dogs" width={421} />
     </div>
   </section>
 </Base>

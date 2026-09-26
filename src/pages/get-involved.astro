@@ -1,5 +1,25 @@
 ---
+/**
+ * Get involved page (/get-involved/).
+ * Sections: foster → volunteer → donate (with note keywords for directing a
+ * gift) → wish list → events → memorial wall.
+ *
+ * Section ids (#foster, #volunteer, #donate, #wish-list, #events, #memorial)
+ * are linked from other pages and from public/_redirects. Keep them stable.
+ *
+ * To add a pet to the memorial wall: put a square-ish photo in
+ * src/assets/images/, import it below, and add a <figure> to .memorial.
+ */
 import Base from "../layouts/Base.astro";
+import { Image } from "astro:assets";
+import { donateUrl, applicationUrls, mailto, email, facebookUrl } from "../data/site";
+import dogCouch from "../assets/images/dog-couch.jpg";
+import dogRottie from "../assets/images/dog-rottie.jpg";
+import puppyChewToy from "../assets/images/puppy-chew-toy.jpg";
+import memorialTank from "../assets/images/memorial-tank.jpg";
+import memorialSaber from "../assets/images/memorial-saber.jpg";
+import memorialBalto from "../assets/images/memorial-balto.jpg";
+import memorialLilly from "../assets/images/memorial-lilly.jpg";
 ---
 <Base
   title="Get involved | Davis Dog Farm"
@@ -20,10 +40,10 @@ import Base from "../layouts/Base.astro";
         <p>Do you have room in your home? Fill out the application and we’ll be in touch.</p>
         <p class="small muted">All fosters must agree to a background check, or provide a current PA State Criminal Record Check and PA Child Abuse Clearance.</p>
         <div class="actions">
-          <a class="btn btn-primary" href="https://service.sheltermanager.com/asmservice?account=ah2716&amp;method=online_form_html&amp;formid=42">Apply to foster</a>
+          <a class="btn btn-primary" href={applicationUrls.foster}>Apply to foster</a>
         </div>
       </div>
-      <img class="tall" src="/images/dog-couch.jpg" alt="A happy brown dog sitting by a couch in a foster home" width="828" height="1104" loading="lazy">
+      <Image src={dogCouch} alt="A happy brown dog sitting by a couch in a foster home" width={800} class="tall" />
     </div>
   </section>
 
@@ -34,13 +54,13 @@ import Base from "../layouts/Base.astro";
         <div class="notice">
           <p>Right now we’re only taking volunteer applications for <strong>transport, events, dog walking, and odds and ends</strong> (cleaning and organizing).</p>
         </div>
-        <p style="margin-top:1.25rem">Apply and our volunteer coordinator will get in touch.</p>
+        <p class="note">Apply and our volunteer coordinator will get in touch.</p>
         <p class="small muted">All volunteers must agree to a background check, or provide a current PA State Criminal Record Check and PA Child Abuse Clearance.</p>
         <div class="actions">
-          <a class="btn btn-primary" href="https://service.sheltermanager.com/asmservice?account=ah2716&amp;method=online_form_html&amp;formid=45">Apply to volunteer</a>
+          <a class="btn btn-primary" href={applicationUrls.volunteer}>Apply to volunteer</a>
         </div>
       </div>
-      <img class="tall" src="/images/dog-rottie.jpg" alt="A Rottweiler looking up with soulful eyes" width="900" height="1200" loading="lazy">
+      <Image src={dogRottie} alt="A Rottweiler looking up with soulful eyes" width={800} class="tall" />
     </div>
   </section>
 
@@ -56,7 +76,7 @@ import Base from "../layouts/Base.astro";
         <li><strong>In memory of</strong> or <strong>in honor of</strong> and your pet’s name, for the memorial wall below</li>
       </ul>
       <div class="actions">
-        <a class="btn btn-donate" href="https://www.paypal.com/donate?hosted_button_id=BNYCE2ETKYDN6">Donate with PayPal</a>
+        <a class="btn btn-donate" href={donateUrl}>Donate with PayPal</a>
       </div>
     </div>
   </section>
@@ -68,10 +88,10 @@ import Base from "../layouts/Base.astro";
         <p>Our dogs always need tough chews. Buying through Ruff Enough supports the rescue, or you can donate with the note “wish list” and we’ll buy what’s needed most.</p>
         <div class="actions">
           <a class="btn btn-primary" href="https://ruffenough.com/?sca_ref=566440.tI2Lap9kRV">Shop Ruff Enough chews</a>
-          <a class="btn btn-plain" href="https://www.paypal.com/donate?hosted_button_id=BNYCE2ETKYDN6">Donate to the wish list</a>
+          <a class="btn btn-plain" href={donateUrl}>Donate to the wish list</a>
         </div>
       </div>
-      <img class="tall" src="/images/puppy-chew-toy.jpg" alt="A puppy lying on a bed with a chew toy" width="512" height="592" loading="lazy">
+      <Image src={puppyChewToy} alt="A puppy lying on a bed with a chew toy" width={512} class="tall" />
     </div>
   </section>
 
@@ -80,9 +100,9 @@ import Base from "../layouts/Base.astro";
       <h2>Events and fundraisers</h2>
       <p>We hold adoption events and fundraisers through the year, like Bark at the Park, with adoptable dogs, food trucks and vendors. New events are posted on our Facebook page first.</p>
       <div class="actions">
-        <a class="btn btn-plain" href="https://www.facebook.com/102837875139459">See upcoming events on Facebook</a>
+        <a class="btn btn-plain" href={facebookUrl}>See upcoming events on Facebook</a>
       </div>
-      <p class="small muted" style="margin-top:1rem">Want to be a vendor? Email <a href="mailto:info@davisdogfarm.com">info@davisdogfarm.com</a>.</p>
+      <p class="small muted note">Want to be a vendor? Email <a href={mailto}>{email}</a>.</p>
     </div>
   </section>
 
@@ -91,10 +111,10 @@ import Base from "../layouts/Base.astro";
       <h2>Memorial wall</h2>
       <p>Honor a pet you’ve loved and lost. Make a donation with the note “in memory of” (or “in honor of”) and your pet’s name, and we’ll add them here. Your gift helps another dog in need.</p>
       <div class="memorial">
-        <figure><img src="/images/memorial-tank.jpg" alt="Tank D" width="800" height="1200" loading="lazy"><figcaption>Tank D.</figcaption></figure>
-        <figure><img src="/images/memorial-saber.jpg" alt="Saber W" width="720" height="720" loading="lazy"><figcaption>Saber W.</figcaption></figure>
-        <figure><img src="/images/memorial-balto.jpg" alt="Balto M" width="800" height="1220" loading="lazy"><figcaption>Balto M.</figcaption></figure>
-        <figure><img src="/images/memorial-lilly.jpg" alt="Lilly" width="720" height="960" loading="lazy"><figcaption>Lilly</figcaption></figure>
+        <figure><Image src={memorialTank} alt="Tank D" width={360} /><figcaption>Tank D.</figcaption></figure>
+        <figure><Image src={memorialSaber} alt="Saber W" width={360} /><figcaption>Saber W.</figcaption></figure>
+        <figure><Image src={memorialBalto} alt="Balto M" width={360} /><figcaption>Balto M.</figcaption></figure>
+        <figure><Image src={memorialLilly} alt="Lilly" width={360} /><figcaption>Lilly</figcaption></figure>
       </div>
     </div>
   </section>
