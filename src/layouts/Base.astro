@@ -1,0 +1,101 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+
+const nav = [
+  { href: "/adopt/", label: "Adopt" },
+  { href: "/get-involved/", label: "Get involved" },
+  { href: "/hope-for-healing/", label: "Hope for Healing" },
+  { href: "/about/", label: "About & contact" },
+];
+
+const donateUrl = "https://www.paypal.com/donate?hosted_button_id=BNYCE2ETKYDN6";
+const forms = "https://service.sheltermanager.com/asmservice?account=ah2716&method=online_form_html&formid=";
+const path = Astro.url.pathname.replace(/\/?$/, "/");
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script is:inline>document.documentElement.className = "js";</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)}>
+  <link rel="icon" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700&family=Zilla+Slab:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/images/logo.jpg" alt="" width="52" height="52"><span>Davis Dog Farm</span></a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav" aria-label="Main">
+      <ul>
+        {nav.map((item) => (
+          <li><a href={item.href} aria-current={path === item.href ? "page" : undefined}>{item.label}</a></li>
+        ))}
+        <li class="nav-donate"><a href={donateUrl}>Donate</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <slot />
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="/images/logo.jpg" alt="" width="72" height="72" loading="lazy">
+        <div>
+          <h2>Davis Dog Farm Inc.</h2>
+          <p>All-breed dog rescue, founded 2021. A 501(c)(3) nonprofit.</p>
+        </div>
+      </div>
+      <div>
+        <h2>Contact</h2>
+        <ul>
+          <li>2686 Sand Beach Road<br>Grantville, PA 17028</li>
+          <li><a href="mailto:info@davisdogfarm.com">info@davisdogfarm.com</a></li>
+          <li><a href="https://www.facebook.com/102837875139459">Facebook</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Applications</h2>
+        <ul>
+          <li><a href={forms + "32"}>Adoption application</a></li>
+          <li><a href={forms + "42"}>Foster application</a></li>
+          <li><a href={forms + "45"}>Volunteer application</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="legal">© {year} Davis Dog Farm Inc. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  const btn = document.querySelector(".menu-toggle");
+  const nav = document.getElementById("nav");
+  btn?.addEventListener("click", () => {
+    const open = nav?.classList.toggle("open") ?? false;
+    btn.setAttribute("aria-expanded", String(open));
+  });
+</script>
+<slot name="scripts" />
+</body>
+</html>

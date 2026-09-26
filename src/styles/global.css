@@ -1,0 +1,412 @@
+/* Davis Dog Farm — shared styles
+   Palette pulled from the farm's own sign: whitewashed boards, charcoal lettering,
+   and the blue painted dogs. Hay yellow is reserved for "Donate". */
+
+:root {
+  --board: #f1f2ee;
+  --paper: #ffffff;
+  --ink: #24282a;
+  --muted: #5b6361;
+  --line: #d5d9d4;
+  --denim: #2f5fa7;
+  --denim-deep: #234a85;
+  --sky: #dde7f3;
+  --hay: #f2b53a;
+  --hay-deep: #d99a17;
+
+  --slab: "Zilla Slab", Rockwell, "Roboto Slab", Georgia, serif;
+  --sans: "Public Sans", "Segoe UI", system-ui, sans-serif;
+
+  --wrap: 72rem;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --radius: 6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--board);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--denim-deep); text-underline-offset: 0.18em; }
+a:hover { color: var(--denim); }
+
+:focus-visible {
+  outline: 3px solid var(--denim);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+h1, h2, h3 {
+  font-family: var(--slab);
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0 0 0.5em;
+  text-wrap: balance;
+}
+h1 { font-size: clamp(2.6rem, 7vw, 4.75rem); letter-spacing: -0.01em; }
+h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); }
+h3 { font-size: 1.4rem; }
+
+p { margin: 0 0 1em; max-width: 38rem; }
+
+.wrap {
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.skip {
+  position: absolute; left: -999px; top: 0;
+  background: var(--ink); color: #fff; padding: 0.5rem 1rem; z-index: 10;
+}
+.skip:focus { left: 1rem; top: 1rem; }
+
+/* ---------- Header ---------- */
+
+.site-header {
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+.site-header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.6rem;
+}
+.brand {
+  display: flex; align-items: center; gap: 0.7rem;
+  text-decoration: none; color: var(--ink);
+  font-family: var(--slab); font-weight: 700; font-size: 1.3rem;
+}
+.brand img { width: 52px; height: 52px; border-radius: 50%; }
+
+.nav ul {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; align-items: center; gap: 0.25rem;
+}
+.nav a {
+  display: block;
+  padding: 0.5rem 0.8rem;
+  text-decoration: none;
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 1rem;
+  border-radius: var(--radius);
+}
+.nav a:hover { background: var(--sky); color: var(--ink); }
+.nav a[aria-current="page"] { color: var(--denim-deep); box-shadow: inset 0 -3px 0 var(--denim); border-radius: 0; }
+.nav .nav-donate a { background: var(--hay); margin-left: 0.4rem; }
+.nav .nav-donate a:hover { background: var(--hay-deep); }
+
+.menu-toggle { display: none; }
+
+@media (max-width: 54rem) {
+  .site-header .wrap { flex-wrap: wrap; }
+  .js .menu-toggle {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font: 700 1rem var(--sans);
+    background: none; border: 2px solid var(--ink); color: var(--ink);
+    padding: 0.45rem 0.9rem; border-radius: var(--radius); cursor: pointer;
+  }
+  .nav { flex-basis: 100%; }
+  .js .nav { display: none; }
+  .js .nav.open { display: block; }
+  .nav ul { flex-direction: column; align-items: stretch; padding-bottom: 0.75rem; }
+  .nav a { padding: 0.8rem 0.5rem; border-bottom: 1px solid var(--line); border-radius: 0; }
+  .nav a[aria-current="page"] { box-shadow: inset 4px 0 0 var(--denim); padding-left: 1rem; }
+  .nav .nav-donate a { margin: 0.75rem 0 0; border-radius: var(--radius); text-align: center; border: 0; }
+  .brand span { font-size: 1.15rem; }
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-block;
+  font: 700 1.05rem/1.2 var(--sans);
+  padding: 0.85rem 1.4rem;
+  border-radius: var(--radius);
+  text-decoration: none;
+  border: 2px solid transparent;
+  text-align: center;
+}
+.btn-primary { background: var(--denim); color: #fff; }
+.btn-primary:hover { background: var(--denim-deep); color: #fff; }
+.btn-donate { background: var(--hay); color: var(--ink); }
+.btn-donate:hover { background: var(--hay-deep); color: var(--ink); }
+.btn-plain { border-color: var(--ink); color: var(--ink); background: transparent; }
+.btn-plain:hover { background: var(--ink); color: #fff; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+
+/* ---------- Home hero ---------- */
+
+.hero { padding-block: clamp(2.5rem, 7vw, 5rem) 0; }
+.hero h1 { max-width: 12ch; }
+.hero .lede { font-size: 1.3rem; max-width: 34rem; color: var(--muted); }
+
+/* The dog line-up: real rescues from the farm, shoulder to shoulder like a fence line. */
+.lineup {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 0.6rem;
+  max-width: calc(var(--wrap) + 12rem);
+  margin: clamp(2rem, 5vw, 3.5rem) auto 0;
+  padding-inline: var(--gutter);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.lineup::-webkit-scrollbar { display: none; }
+.lineup figure {
+  margin: 0;
+  scroll-snap-align: start;
+  position: relative;
+}
+.lineup img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.lineup figure:nth-child(even) img { aspect-ratio: 3 / 4.4; }
+.lineup { align-items: end; }
+@media (max-width: 54rem) { .lineup { grid-auto-columns: 42%; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  .lineup figure { animation: rise 700ms cubic-bezier(.2,.7,.2,1) both; }
+  .lineup figure:nth-child(2) { animation-delay: 80ms; }
+  .lineup figure:nth-child(3) { animation-delay: 160ms; }
+  .lineup figure:nth-child(4) { animation-delay: 240ms; }
+  .lineup figure:nth-child(5) { animation-delay: 320ms; }
+  .lineup figure:nth-child(6) { animation-delay: 400ms; }
+  .lineup figure:nth-child(7) { animation-delay: 480ms; }
+  @keyframes rise { from { transform: translateY(2.5rem); opacity: 0; } }
+}
+
+.ground { height: 0.9rem; background: var(--ink); }
+
+/* ---------- Sections ---------- */
+
+.section { padding-block: clamp(3rem, 8vw, 5.5rem); }
+.section-white { background: var(--paper); }
+.section-sky { background: var(--sky); }
+.section-ink { background: var(--ink); color: #eef0ec; }
+.section-ink a { color: #fff; }
+.section-ink .muted { color: #b9c0bd; }
+
+.page-head { padding-block: clamp(2.5rem, 6vw, 4rem) clamp(1.5rem, 4vw, 2.5rem); }
+.page-head p { font-size: 1.25rem; color: var(--muted); }
+
+.muted { color: var(--muted); }
+.small { font-size: 0.95rem; }
+
+.split {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+.split.flip > :first-child { order: 2; }
+.split img { border-radius: var(--radius); width: 100%; object-fit: cover; }
+.split .tall { aspect-ratio: 4 / 5; }
+@media (max-width: 48rem) {
+  .split { grid-template-columns: 1fr; }
+  .split.flip > :first-child { order: 0; }
+}
+
+/* Three ways to help — deliberately not identical cards: each has its own photo and call. */
+.ways {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  margin-top: 2rem;
+}
+.ways article { display: flex; flex-direction: column; }
+.ways img { aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius); margin-bottom: 1.1rem; }
+.ways p { flex: 1; }
+@media (max-width: 54rem) { .ways { grid-template-columns: 1fr; } }
+
+/* Adoption steps are a real sequence, so they're numbered. */
+.steps {
+  list-style: none; padding: 0; margin: 2rem 0 0;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;
+  counter-reset: step;
+}
+.steps li { counter-increment: step; border-top: 4px solid var(--denim); padding-top: 1rem; }
+.steps li::before {
+  content: counter(step);
+  font: 700 2.4rem/1 var(--slab);
+  color: var(--denim);
+  display: block; margin-bottom: 0.5rem;
+}
+.steps h3 { margin-bottom: 0.3em; }
+.steps p { font-size: 1rem; }
+@media (max-width: 60rem) { .steps { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 34rem) { .steps { grid-template-columns: 1fr; } }
+
+/* Fees table */
+.table-scroll { overflow-x: auto; }
+.fees { border-collapse: collapse; width: 100%; max-width: 40rem; font-size: 1.05rem; }
+.fees th, .fees td { text-align: left; padding: 0.8rem 0.5rem; border-bottom: 1px solid var(--line); }
+.fees th { font-weight: 400; }
+.fees td { font-weight: 700; white-space: nowrap; }
+.fees .highlight th, .fees .highlight td { background: var(--sky); }
+.fees .highlight th { padding-left: 0.75rem; }
+
+/* Dog profiles */
+.dogs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.dog { background: var(--paper); border-radius: var(--radius); overflow: hidden; }
+.dog img { aspect-ratio: 1; object-fit: cover; width: 100%; }
+.dog div { padding: 1rem 1.2rem 1.3rem; }
+.dog h3 { margin-bottom: 0.2em; }
+.dog p { font-size: 1rem; margin: 0; }
+
+.petfinder-callout {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem;
+  background: var(--ink); color: #fff;
+  padding: 1.5rem clamp(1.25rem, 3vw, 2rem);
+  border-radius: var(--radius);
+  margin-top: 2rem;
+}
+.petfinder-callout p { margin: 0; font-size: 1.15rem; }
+.petfinder-callout strong { font-family: var(--slab); font-size: 1.5rem; display: block; }
+
+/* Recipient stories (Hope for Healing) */
+.story {
+  display: grid; grid-template-columns: 16rem 1fr; gap: clamp(1.25rem, 3vw, 2.5rem);
+  padding-block: 2rem; border-top: 1px solid var(--line);
+}
+.story:first-of-type { border-top: 0; }
+.story img { aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radius); width: 100%; }
+.story .aka { color: var(--muted); font-family: var(--sans); font-weight: 400; font-size: 1.1rem; }
+@media (max-width: 40rem) { .story { grid-template-columns: 1fr; } .story img { max-width: 20rem; } }
+
+/* Memorial wall */
+.memorial {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-top: 2rem;
+}
+.memorial figure { margin: 0; }
+.memorial img { aspect-ratio: 1; object-fit: cover; border-radius: 50%; filter: saturate(0.8); }
+.memorial figcaption { text-align: center; font-family: var(--slab); font-weight: 700; font-size: 1.25rem; margin-top: 0.6rem; }
+@media (max-width: 40rem) { .memorial { grid-template-columns: repeat(2, 1fr); } }
+
+/* Notices */
+.notice {
+  border-left: 5px solid var(--hay);
+  background: var(--paper);
+  padding: 1rem 1.25rem;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  max-width: 40rem;
+}
+.notice p:last-child { margin-bottom: 0; }
+
+.checklist { padding-left: 1.2rem; max-width: 38rem; }
+.checklist li { margin-bottom: 0.4rem; }
+
+.partners { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: 2rem; margin-top: 2rem; }
+.partners a { display: block; text-decoration: none; color: var(--ink); }
+.partners img { height: 8rem; width: 100%; object-fit: contain; background: #fff; border-radius: var(--radius); padding: 0.75rem; margin-bottom: 0.9rem; }
+.partners h3 { color: var(--denim-deep); margin-bottom: 0.2em; }
+.partners p { font-size: 1rem; }
+
+.contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.contact-grid h3 { font-size: 1.15rem; margin-bottom: 0.3em; }
+@media (max-width: 48rem) { .contact-grid { grid-template-columns: 1fr; } }
+
+.map { width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: var(--radius); margin-top: 2rem; background: var(--line); }
+
+/* ---------- Footer ---------- */
+
+.site-footer { background: var(--ink); color: #d7dbd8; padding-block: 3rem 2rem; font-size: 1rem; }
+.site-footer a { color: #fff; }
+.footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 2rem; }
+.footer-grid h2 { font-size: 1.2rem; color: #fff; }
+.footer-grid ul { list-style: none; padding: 0; margin: 0; }
+.footer-grid li { margin-bottom: 0.35rem; }
+.footer-brand { display: flex; gap: 1rem; align-items: flex-start; }
+.footer-brand img { width: 72px; height: 72px; border-radius: 50%; flex: none; }
+.legal { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid #3c4244; font-size: 0.9rem; color: #a9b0ad; }
+@media (max-width: 48rem) { .footer-grid { grid-template-columns: 1fr; } }
+
+/* ---------- Live adoptable dogs (ShelterManager embed) ----------
+   The embed writes its own markup and inline styles; these rules restyle it to match. */
+
+.adoptables #asm3-adoptable-filters {
+  text-align: left !important;
+  padding: 0 !important;
+  margin: 0 0 1.5rem;
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+.adoptables select {
+  font: 1rem var(--sans);
+  padding: 0.55rem 0.8rem;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--ink);
+}
+.adoptables .asm3-adoptable-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1.5rem;
+}
+.adoptables .asm3-adoptable-item {
+  display: flex !important;
+  flex-direction: column;
+  text-align: left !important;
+  padding: 0 !important;
+  max-width: none;
+  background: var(--board);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.adoptables .asm3-adoptable-link { text-decoration: none; color: var(--ink); display: block; }
+.adoptables .asm3-adoptable-link > div:first-child { position: relative; }
+.adoptables .asm3-adoptable-thumbnail {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  background: var(--line);
+}
+.adoptables .asm3-adoptable-reserved::after {
+  content: "Adoption pending";
+  position: absolute; left: 0.75rem; top: 0.75rem;
+  background: var(--hay); color: var(--ink);
+  font-weight: 700; font-size: 0.9rem;
+  padding: 0.25rem 0.6rem; border-radius: var(--radius);
+}
+.adoptables .asm3-adoptable-name {
+  font: 700 1.45rem/1.15 var(--slab);
+  padding: 1rem 1.2rem 0.2rem;
+  color: var(--denim-deep);
+}
+.adoptables .asm3-adoptable-link:hover .asm3-adoptable-name { text-decoration: underline; }
+.adoptables .asm3-adoptable-breed { padding: 0 1.2rem; font-size: 1rem; }
+.adoptables .asm3-adoptable-tagline { display: flex; flex-wrap: wrap; order: 3; padding: 0.2rem 1.2rem 1.3rem; font-size: 1rem; color: var(--muted); }
+.adoptables .asm3-adoptable-tag + .asm3-adoptable-tag::before { content: ",\00a0"; }
+.adoptables .asm3-adoptable-no-results { grid-column: 1 / -1; }
+@media (max-width: 40rem) {
+  .adoptables .asm3-adoptable-list { grid-template-columns: repeat(2, 1fr); gap: 0.9rem; }
+  .adoptables .asm3-adoptable-name { font-size: 1.2rem; padding: 0.75rem 0.8rem 0.15rem; }
+  .adoptables .asm3-adoptable-breed { padding: 0 0.8rem; font-size: 0.9rem; }
+  .adoptables .asm3-adoptable-tagline { padding: 0.15rem 0.8rem 1rem; font-size: 0.9rem; }
+}
