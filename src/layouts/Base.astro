@@ -1,28 +1,40 @@
 ---
 /**
- * Page shell shared by every page: <head>, header with nav, footer.
+ * The page shell every page renders inside: <head>, header + nav, footer.
  *
- * Usage:
  *   <Base title="Adopt a dog | Davis Dog Farm" description="…">
  *     …page sections…
  *   </Base>
  *
- * To add a page to the main menu, add it to `nav` below.
+ * Keep this layout thin. It owns only what is identical on every page;
+ * page-specific markup belongs in the page, and anything reused across a few
+ * pages belongs in src/components/. To add a page to the main menu, add an
+ * entry to `nav` below.
  */
-import "../styles/global.css";
 import { Font, Image } from "astro:assets";
+import "../styles/global.css";
 import logo from "../assets/images/logo.jpg";
-import { address, applicationUrls, donateUrl, email, facebookUrl, mailto } from "../data/site";
+import {
+  address,
+  applicationUrls,
+  donateUrl,
+  email,
+  facebookUrl,
+  mailto,
+  shopUrl,
+} from "../data/site";
 
 interface Props {
-  /** Browser tab / search result title. Convention: "Page name | Davis Dog Farm". */
+  /** Browser tab and search-result title. Convention: "Page name | Davis Dog Farm". */
   title: string;
-  /** Meta description shown under the title in search results (~150 characters). */
+  /** Search-result snippet. Aim for 120–160 characters that describe the page. */
   description: string;
 }
 
 const { title, description } = Astro.props;
 
+// Internal pages. Shop and Donate are external links and are rendered
+// separately below, because they point to other sites.
 const nav = [
   { href: "/adopt/", label: "Adopt" },
   { href: "/get-involved/", label: "Get involved" },
@@ -30,87 +42,133 @@ const nav = [
   { href: "/about/", label: "About & contact" },
 ];
 
-// Current path with a trailing slash, to match `nav` hrefs and build the canonical URL.
+// Normalize to a trailing slash so "/adopt" and "/adopt/" both match the nav
+// entry and produce the same canonical URL.
 const path = Astro.url.pathname.replace(/\/?$/, "/");
-// Evaluated at build time; every deploy refreshes it.
+
+// The site is static, so this is evaluated at build time. Every deploy
+// refreshes it, and nobody has to remember to update a copyright year.
 const year = new Date().getFullYear();
 ---
+
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <!-- Lets CSS collapse the mobile menu only when the script that opens it can run. -->
-  <script is:inline>document.documentElement.classList.add("js");</script>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{title}</title>
-  <meta name="description" content={description}>
-  <link rel="canonical" href={new URL(path, Astro.site)}>
-  <link rel="icon" href="/favicon.png">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <Font cssVariable="--font-sans" preload />
-  <Font cssVariable="--font-slab" preload />
-</head>
-<body>
-<a class="skip" href="#main">Skip to content</a>
+  <head>
+    <meta charset="utf-8" />
+    <!--
+      Runs before first paint, so CSS can collapse the mobile menu only when
+      the script that opens it is available. See "Mobile menu" in global.css.
+    -->
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(path, Astro.site)} />
+    <link rel="icon" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <!-- Self-hosted fonts with preload hints; configured in astro.config.mjs. -->
+    <Font cssVariable="--font-sans" preload />
+    <Font cssVariable="--font-slab" preload />
+  </head>
+  <body>
+    <a class="skip" href="#main">
+      Skip to content
+    </a>
 
-<header class="site-header">
-  <div class="wrap">
-    <a class="brand" href="/"><Image src={logo} alt="" width={104} loading="eager" /><span>Davis Dog Farm</span></a>
-    <button class="menu-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
-    <nav class="nav" id="nav" aria-label="Main">
-      <ul>
-        {nav.map((item) => (
-          <li><a href={item.href} aria-current={path === item.href ? "page" : undefined}>{item.label}</a></li>
-        ))}
-        <li class="nav-donate"><a href={donateUrl}>Donate</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
+    <header class="site-header">
+      <div class="wrap">
+        <!-- Empty alt: the visible site name next to it already labels the link. -->
+        <a class="brand" href="/">
+          <Image src={logo} alt="" width={104} loading="eager" />
+          <span>Davis Dog Farm</span>
+        </a>
+        <button class="menu-toggle" aria-expanded="false" aria-controls="nav">
+          Menu
+        </button>
+        <nav class="nav" id="nav" aria-label="Main">
+          <ul>
+            {nav.map((item) => (
+              <li>
+                <a href={item.href} aria-current={path === item.href ? "page" : undefined}>
+                  {item.label}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a href={shopUrl}>Shop</a>
+            </li>
+            <li class="nav-donate">
+              <a href={donateUrl}>Donate</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
 
-<main id="main">
-  <slot />
-</main>
+    <main id="main">
+      <slot />
+    </main>
 
-<footer class="site-footer">
-  <div class="wrap">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <Image src={logo} alt="" width={144} />
-        <div>
-          <h2>Davis Dog Farm Inc.</h2>
-          <p>All-breed dog rescue, founded 2021. A 501(c)(3) nonprofit.</p>
+    <footer class="site-footer">
+      <div class="wrap">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <Image src={logo} alt="" width={144} />
+            <div>
+              <h2>Davis Dog Farm Inc.</h2>
+              <p>All-breed dog rescue, founded 2021. A 501(c)(3) nonprofit.</p>
+            </div>
+          </div>
+          <div>
+            <h2>Contact</h2>
+            <ul>
+              <li>
+                {address.street}
+                <br />
+                {address.cityStateZip}
+              </li>
+              <li>
+                <a href={mailto}>{email}</a>
+              </li>
+              <li>
+                <a href={facebookUrl}>Facebook</a>
+              </li>
+              <li>
+                <a href={shopUrl}>Shop</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h2>Applications</h2>
+            <ul>
+              <li>
+                <a href={applicationUrls.adopt}>Adoption application</a>
+              </li>
+              <li>
+                <a href={applicationUrls.foster}>Foster application</a>
+              </li>
+              <li>
+                <a href={applicationUrls.volunteer}>Volunteer application</a>
+              </li>
+            </ul>
+          </div>
         </div>
+        <p class="legal">© {year} Davis Dog Farm Inc. All rights reserved.</p>
       </div>
-      <div>
-        <h2>Contact</h2>
-        <ul>
-          <li>{address.street}<br>{address.cityStateZip}</li>
-          <li><a href={mailto}>{email}</a></li>
-          <li><a href={facebookUrl}>Facebook</a></li>
-        </ul>
-      </div>
-      <div>
-        <h2>Applications</h2>
-        <ul>
-          <li><a href={applicationUrls.adopt}>Adoption application</a></li>
-          <li><a href={applicationUrls.foster}>Foster application</a></li>
-          <li><a href={applicationUrls.volunteer}>Volunteer application</a></li>
-        </ul>
-      </div>
-    </div>
-    <p class="legal">© {year} Davis Dog Farm Inc. All rights reserved.</p>
-  </div>
-</footer>
+    </footer>
 
-<!-- Mobile menu toggle. Styles for .open and the .js gate are in global.css. -->
-<script>
-  const btn = document.querySelector(".menu-toggle");
-  const nav = document.getElementById("nav");
-  btn?.addEventListener("click", () => {
-    const open = nav?.classList.toggle("open") ?? false;
-    btn.setAttribute("aria-expanded", String(open));
-  });
-</script>
-</body>
+    <script>
+      // Mobile menu toggle. aria-expanded tells screen readers whether the
+      // menu is open; the .open class is what CSS uses to show it.
+      const button = document.querySelector<HTMLButtonElement>(".menu-toggle");
+      const nav = document.getElementById("nav");
+
+      button?.addEventListener("click", () => {
+        const isOpen = nav?.classList.toggle("open") ?? false;
+        button.setAttribute("aria-expanded", String(isOpen));
+      });
+    </script>
+  </body>
 </html>

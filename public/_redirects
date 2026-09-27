@@ -13,4 +13,8 @@
 /wish-list               /get-involved/#wish-list    301
 /events-and-fundraisers  /get-involved/#events       301
 /memorial-page           /get-involved/#memorial     301
-/shop                    /                           301
+
+# The store still runs on GoDaddy (see shopUrl in src/data/site.ts). 302 because
+# it's temporary; update these when the store moves.
+/shop                    https://davisdogfarm.godaddysites.com/shop          302
+/ols/*                   https://davisdogfarm.godaddysites.com/ols/:splat    302

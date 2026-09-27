@@ -1,18 +1,31 @@
 ---
 /**
  * Home page (/).
- * Sections: hero with logo and dog line-up → how adoption works (summary of
- * the steps on /adopt/) → three ways to help → Hope for Healing teaser →
- * visits by appointment.
  *
- * Images are imported so Astro can resize them and convert them to WebP at
- * build time. `width` is about 2× the largest size each one is shown at.
- * The first three line-up photos load eagerly because they're above the fold.
+ * Its job is to route three audiences in one screen: would-be adopters
+ * (Meet our dogs), fosters (Become a foster), and donors (Donate, in the
+ * header). Everything below the hero supports those three paths.
+ *
+ * Sections: hero (logo + dog line-up) → how adoption works → ways to help →
+ * Hope for Healing teaser → latest Facebook posts → visits by appointment.
+ *
+ * Image conventions used here and on every page:
+ * - Photos are imported rather than referenced by URL, so Astro can resize
+ *   them and convert them to WebP at build time.
+ * - `width` is about 2× the largest size the image is displayed at, which
+ *   keeps it sharp on high-density screens without shipping extra bytes.
+ * - <Image> lazy-loads by default. Only above-the-fold images get
+ *   loading="eager", and the first line-up photo also gets
+ *   fetchpriority="high".
  */
-import Base from "../layouts/Base.astro";
 import { Image } from "astro:assets";
+
+import Base from "../layouts/Base.astro";
+import FacebookFeed from "../components/FacebookFeed.astro";
+
+import { donateUrl, mailto, email, facebookUrl } from "../data/site";
+
 import logo from "../assets/images/logo.jpg";
-import { donateUrl, mailto, email } from "../data/site";
 import dogBulldog from "../assets/images/dog-bulldog.jpg";
 import khaos from "../assets/images/khaos.jpg";
 import dogSmallBrown from "../assets/images/dog-small-brown.jpg";
@@ -25,6 +38,7 @@ import adoptMeSnow from "../assets/images/adopt-me-snow.jpg";
 import zoey from "../assets/images/zoey.jpg";
 import sign from "../assets/images/sign.jpg";
 ---
+
 <Base
   title="Davis Dog Farm | All-breed dog rescue in Grantville, PA"
   description="Davis Dog Farm is a foster-based, all-breed 501(c)(3) dog rescue in Grantville, Pennsylvania. Adopt, foster, volunteer, or donate."
@@ -33,37 +47,105 @@ import sign from "../assets/images/sign.jpg";
     <div class="wrap hero-grid">
       <div>
         <h1>Rescue. Recover. Rehome.</h1>
-        <p class="lede">We’re an all-breed dog rescue in Grantville, PA. Our dogs live with foster families, not in kennels, until they find a home of their own.</p>
+        <p class="lede">
+          We’re an all-breed dog rescue in Grantville, PA. Our dogs live with foster families, not
+          in kennels, until they find a home of their own.
+        </p>
         <div class="actions">
-          <a class="btn btn-primary" href="/adopt/">Meet our dogs</a>
-          <a class="btn btn-plain" href="/get-involved/#foster">Become a foster</a>
+          <a class="btn btn-primary" href="/adopt/">
+            Meet our dogs
+          </a>
+          <a class="btn btn-plain" href="/get-involved/#foster">
+            Become a foster
+          </a>
         </div>
       </div>
-      <Image class="hero-logo" src={logo} alt="The Davis Dog Farm logo: Rescue, Recover, Rehome. All breed dog rescue, established 2021." width={500} loading="eager" />
+      <Image
+        class="hero-logo"
+        src={logo}
+        alt="The Davis Dog Farm logo: Rescue, Recover, Rehome. All breed dog rescue, established 2021."
+        width={500}
+        loading="eager"
+      />
     </div>
     <div class="lineup" role="region" aria-label="Some of our rescue dogs" tabindex="0">
-      <figure><Image src={dogBulldog} alt="A white and brown bulldog looking up" width={450} fetchpriority="high" loading="eager" /></figure>
-      <figure><Image src={khaos} alt="Khaos, a Belgian Malinois, sitting in a field" width={450} loading="eager" /></figure>
-      <figure><Image src={dogSmallBrown} alt="A small brown dog resting on a checkered bed" width={450} loading="eager" /></figure>
-      <figure><Image src={dogAutumnLeaves} alt="A happy black and tan dog standing in autumn leaves" width={450} /></figure>
-      <figure><Image src={dogRottie} alt="A Rottweiler looking up with soulful eyes" width={450} /></figure>
-      <figure><Image src={dogBandana} alt="A young Malinois in a blue bandana on a patio chair" width={450} /></figure>
+      <figure>
+        <Image
+          src={dogBulldog}
+          alt="A white and brown bulldog looking up"
+          width={450}
+          fetchpriority="high"
+          loading="eager"
+        />
+      </figure>
+      <figure>
+        <Image
+          src={khaos}
+          alt="Khaos, a Belgian Malinois, sitting in a field"
+          width={450}
+          loading="eager"
+        />
+      </figure>
+      <figure>
+        <Image
+          src={dogSmallBrown}
+          alt="A small brown dog resting on a checkered bed"
+          width={450}
+          loading="eager"
+        />
+      </figure>
+      <figure>
+        <Image
+          src={dogAutumnLeaves}
+          alt="A happy black and tan dog standing in autumn leaves"
+          width={450}
+        />
+      </figure>
+      <figure>
+        <Image src={dogRottie} alt="A Rottweiler looking up with soulful eyes" width={450} />
+      </figure>
+      <figure>
+        <Image
+          src={dogBandana}
+          alt="A young Malinois in a blue bandana on a patio chair"
+          width={450}
+        />
+      </figure>
     </div>
   </section>
 
   <section class="section section-white">
     <div class="wrap">
       <h2>How adoption works</h2>
-      <p>Because our dogs live in foster homes, every meeting is by appointment. It starts with an application.</p>
+      <p>
+        Because our dogs live in foster homes, every meeting is by appointment. It starts with an
+        application.
+      </p>
       <ol class="steps">
-        <li><h3>Apply</h3><p>Tell us about your home, your routine and any pets you have.</p></li>
-        <li><h3>Reference check</h3><p>We call your vet to confirm your current pets are up to date.</p></li>
-        <li><h3>Meet and greet</h3><p>We match you with a dog and set up a meet with your whole household, dogs included.</p></li>
-        <li><h3>Home visit</h3><p>A quick visit to your home, and then it’s adoption day.</p></li>
+        <li>
+          <h3>Apply</h3>
+          <p>Tell us about your home, your routine and any pets you have.</p>
+        </li>
+        <li>
+          <h3>Reference check</h3>
+          <p>We call your vet to confirm your current pets are up to date.</p>
+        </li>
+        <li>
+          <h3>Meet and greet</h3>
+          <p>We match you with a dog and set up a meet with your whole household, dogs included.</p>
+        </li>
+        <li>
+          <h3>Home visit</h3>
+          <p>A quick visit to your home, and then it’s adoption day.</p>
+        </li>
       </ol>
       <div class="actions">
-        <a class="btn btn-primary" href="/adopt/">See adoptable dogs</a>
-        <a class="btn btn-plain" href="/adopt/#fees">Adoption fees</a>
+        <a class="btn btn-primary" href="/adopt/">
+          See adoptable dogs
+        </a>
+        <a class="btn btn-plain" href="/adopt/#fees">
+          Adoption fees
+        </a>
       </div>
     </div>
   </section>
@@ -73,22 +155,42 @@ import sign from "../assets/images/sign.jpg";
       <h2>Not ready to adopt? You can still help.</h2>
       <div class="ways">
         <article id="foster">
-          <Image src={puppiesWithKid} alt="A smiling child holding two fluffy puppies" width={700} />
+          <Image
+            src={puppiesWithKid}
+            alt="A smiling child holding two fluffy puppies"
+            width={700}
+          />
           <h3>Foster a dog</h3>
-          <p>Most of our dogs live in foster homes. You give a dog a safe place to recover and learn what family life is like until they’re adopted.</p>
-          <a class="btn btn-primary" href="/get-involved/#foster">Learn about fostering</a>
+          <p>
+            Most of our dogs live in foster homes. You give a dog a safe place to recover and learn
+            what family life is like until they’re adopted.
+          </p>
+          <a class="btn btn-primary" href="/get-involved/#foster">
+            Learn about fostering
+          </a>
         </article>
         <article>
           <Image src={trainingWalk} alt="A volunteer walking a small black dog" width={700} />
           <h3>Volunteer</h3>
           <p>We need help with transport, events, dog walking, and cleaning and organizing.</p>
-          <a class="btn btn-primary" href="/get-involved/#volunteer">Volunteer with us</a>
+          <a class="btn btn-primary" href="/get-involved/#volunteer">
+            Volunteer with us
+          </a>
         </article>
         <article>
-          <Image src={adoptMeSnow} alt="A dog in an Adopt Me vest walking in the snow" width={700} />
+          <Image
+            src={adoptMeSnow}
+            alt="A dog in an Adopt Me vest walking in the snow"
+            width={700}
+          />
           <h3>Donate</h3>
-          <p>As a 501(c)(3), we run on donations. Every dollar goes toward food, medical care and training for dogs in our care.</p>
-          <a class="btn btn-donate" href={donateUrl}>Donate with PayPal</a>
+          <p>
+            As a 501(c)(3), we run on donations. Every dollar goes toward food, medical care and
+            training for dogs in our care.
+          </p>
+          <a class="btn btn-donate" href={donateUrl}>
+            Donate with PayPal
+          </a>
         </article>
       </div>
     </div>
@@ -98,13 +200,42 @@ import sign from "../assets/images/sign.jpg";
     <div class="wrap split">
       <div>
         <h2>Hope for Healing</h2>
-        <p>Some dogs come to us needing surgery or long-term treatment. Our Hope for Healing fund pays for it, and it helps neighbors who are struggling to afford vet care for their own dogs.</p>
+        <p>
+          Some dogs come to us needing surgery or long-term treatment. Our Hope for Healing fund
+          pays for it, and it helps neighbors who are struggling to afford vet care for their own
+          dogs.
+        </p>
         <p>It’s named for Hope, a sweet girl whose cancer care was paid for by donors.</p>
         <div class="actions">
-          <a class="btn btn-primary" href="/hope-for-healing/">Read their stories</a>
+          <a class="btn btn-primary" href="/hope-for-healing/">
+            Read their stories
+          </a>
         </div>
       </div>
-      <Image src={zoey} alt="Zoey after her eye surgery, resting in her foster’s lap" width={720} class="tall" />
+      <Image
+        src={zoey}
+        alt="Zoey after her eye surgery, resting in her foster’s lap"
+        width={720}
+        class="tall"
+      />
+    </div>
+  </section>
+
+  <section class="section section-white" id="news">
+    <div class="wrap split">
+      <div>
+        <h2>News from the farm</h2>
+        <p>
+          Our Facebook page is where we post first: dogs who just arrived, adoption updates, events,
+          and supply drives.
+        </p>
+        <div class="actions">
+          <a class="btn btn-primary" href={facebookUrl}>
+            Follow us on Facebook
+          </a>
+        </div>
+      </div>
+      <FacebookFeed />
     </div>
   </section>
 
@@ -112,8 +243,14 @@ import sign from "../assets/images/sign.jpg";
     <div class="wrap split flip">
       <div>
         <h2>Visits are by appointment only</h2>
-        <p>Please don’t come to any of our locations without an appointment. We’re busy caring for the dogs, and appointments keep them and our staff safe.</p>
-        <p>If you’d like to meet a dog, <a href="/adopt/">apply first</a> and we’ll contact you. For anything else, email <a href={mailto}>{email}</a>.</p>
+        <p>
+          Please don’t come to any of our locations without an appointment. We’re busy caring for
+          the dogs, and appointments keep them and our staff safe.
+        </p>
+        <p>
+          If you’d like to meet a dog, <a href="/adopt/">apply first</a> and we’ll contact you. For
+          anything else, email <a href={mailto}>{email}</a>.
+        </p>
       </div>
       <Image src={sign} alt="Painted wooden Davis Dog Farm sign with blue dogs" width={421} />
     </div>

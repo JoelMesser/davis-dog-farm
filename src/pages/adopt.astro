@@ -1,20 +1,25 @@
 ---
 /**
  * Adopt page (/adopt/).
- * Sections: intro + application links → live list of adoptable dogs
- * (<Adoptables />, fed by ShelterManager) → adoption process → fees →
- * training fund.
  *
- * Adoption fees are hard-coded in the table below. Update them here if the
+ * Sections: intro + application links → live list of adoptable dogs →
+ * adoption process → fees → training fund.
+ *
+ * The dog list isn't in this repo; it comes live from ShelterManager (see
+ * <Adoptables />). The fees table is hard-coded, so update it here if the
  * rescue changes its prices.
  */
+import { Image } from "astro:assets";
+
 import Base from "../layouts/Base.astro";
 import Adoptables from "../components/Adoptables.astro";
-import { Image } from "astro:assets";
+
 import { donateUrl, applicationUrls, mailto, adoptionPoliciesUrl } from "../data/site";
+
 import dogBandana from "../assets/images/dog-bandana.jpg";
 import trainingWalk from "../assets/images/training-walk.jpg";
 ---
+
 <Base
   title="Adopt a dog | Davis Dog Farm"
   description="See dogs available for adoption at Davis Dog Farm, our adoption process, and adoption fees."
@@ -22,10 +27,17 @@ import trainingWalk from "../assets/images/training-walk.jpg";
   <section class="page-head">
     <div class="wrap">
       <h1>Adopt a dog</h1>
-      <p>These are the dogs currently looking for homes. Tap a dog to see their full profile, then send in an application. We don’t schedule meets until we have one.</p>
+      <p>
+        These are the dogs currently looking for homes. Tap a dog to see their full profile, then
+        send in an application. We don’t schedule meets until we have one.
+      </p>
       <div class="actions">
-        <a class="btn btn-primary" href={applicationUrls.adopt}>Start an adoption application</a>
-        <a class="btn btn-plain" href={adoptionPoliciesUrl}>Read our adoption policies</a>
+        <a class="btn btn-primary" href={applicationUrls.adopt}>
+          Start an adoption application
+        </a>
+        <a class="btn btn-plain" href={adoptionPoliciesUrl}>
+          Read our adoption policies
+        </a>
       </div>
     </div>
   </section>
@@ -40,19 +52,32 @@ import trainingWalk from "../assets/images/training-walk.jpg";
   <section class="section">
     <div class="wrap">
       <h2>The adoption process</h2>
-      <p>Our application helps us get to know your family, your lifestyle and the pets you already have, so we can place each dog where they’ll do best. The dog you have in mind may not be the right fit for your home, and we’ll tell you honestly if so.</p>
+      <p>
+        Our application helps us get to know your family, your lifestyle and the pets you already
+        have, so we can place each dog where they’ll do best. The dog you have in mind may not be
+        the right fit for your home, and we’ll tell you honestly if so.
+      </p>
       <ol class="steps">
         <li>
           <h3>Apply</h3>
-          <p>Fill out every question. If something doesn’t apply, write N/A. Incomplete applications can’t be considered, and applying doesn’t guarantee a match with a specific dog.</p>
+          <p>
+            Fill out every question. If something doesn’t apply, write N/A. Incomplete applications
+            can’t be considered, and applying doesn’t guarantee a match with a specific dog.
+          </p>
         </li>
         <li>
           <h3>Reference check</h3>
-          <p>We contact your veterinarian to confirm the pets in your home are up to date on shots and exams.</p>
+          <p>
+            We contact your veterinarian to confirm the pets in your home are up to date on shots
+            and exams.
+          </p>
         </li>
         <li>
           <h3>Meet and greet</h3>
-          <p>We match you with a dog that fits your lifestyle and arrange a meet. Everyone in your household, including your dogs, needs to be there.</p>
+          <p>
+            We match you with a dog that fits your lifestyle and arrange a meet. Everyone in your
+            household, including your dogs, needs to be there.
+          </p>
         </li>
         <li>
           <h3>Home visit</h3>
@@ -69,18 +94,45 @@ import trainingWalk from "../assets/images/training-walk.jpg";
         <div class="table-scroll">
           <table class="fees">
             <tbody>
-              <tr><th scope="row">Puppy (up to 1 year)</th><td>$400–$550</td></tr>
-              <tr><th scope="row">Young adult (1–3 years)</th><td>$350–$400</td></tr>
-              <tr><th scope="row">Adult (3–6 years)</th><td>$250–$350</td></tr>
-              <tr><th scope="row">Senior (6+ years)</th><td>$100–$200</td></tr>
-              <tr class="highlight"><th scope="row">Seniors for Seniors: dogs over 6, for approved adopters 60 and up</th><td>Free</td></tr>
+              <tr>
+                <th scope="row">Puppy (up to 1 year)</th>
+                <td>$400–$550</td>
+              </tr>
+              <tr>
+                <th scope="row">Young adult (1–3 years)</th>
+                <td>$350–$400</td>
+              </tr>
+              <tr>
+                <th scope="row">Adult (3–6 years)</th>
+                <td>$250–$350</td>
+              </tr>
+              <tr>
+                <th scope="row">Senior (6+ years)</th>
+                <td>$100–$200</td>
+              </tr>
+              <tr class="highlight">
+                <th scope="row">
+                  Seniors for Seniors: dogs over 6, for approved adopters 60 and up
+                </th>
+                <td>Free</td>
+              </tr>
             </tbody>
           </table>
         </div>
-        <p class="small muted note">Exact fees depend on breed, health, temperament and other factors.</p>
-        <p>We look at every application individually. If your situation doesn’t quite fit our policies, <a href={mailto}>email us</a> and we’ll do our best to help.</p>
+        <p class="small muted note">
+          Exact fees depend on breed, health, temperament and other factors.
+        </p>
+        <p>
+          We look at every application individually. If your situation doesn’t quite fit our
+          policies, <a href={mailto}>email us</a> and we’ll do our best to help.
+        </p>
       </div>
-      <Image src={dogBandana} alt="A young Malinois in a blue bandana sitting on a patio chair" width={800} class="tall" />
+      <Image
+        src={dogBandana}
+        alt="A young Malinois in a blue bandana sitting on a patio chair"
+        width={800}
+        class="tall"
+      />
     </div>
   </section>
 
@@ -88,14 +140,25 @@ import trainingWalk from "../assets/images/training-walk.jpg";
     <div class="wrap split flip">
       <div>
         <h2>Send a dog to school</h2>
-        <p>Some dogs arrive with habits that make a new home harder. We work with local trainers on obedience and behavior so they can settle in and stay there.</p>
-        <p>To give to training, donate through PayPal and add the note <strong>“training”</strong>.</p>
+        <p>
+          Some dogs arrive with habits that make a new home harder. We work with local trainers on
+          obedience and behavior so they can settle in and stay there.
+        </p>
+        <p>
+          To give to training, donate through PayPal and add the note <strong>“training”</strong>.
+        </p>
         <div class="actions">
-          <a class="btn btn-donate" href={donateUrl}>Donate to training</a>
+          <a class="btn btn-donate" href={donateUrl}>
+            Donate to training
+          </a>
         </div>
       </div>
-      <Image src={trainingWalk} alt="A trainer walking a small black dog on a leash indoors" width={800} class="tall" />
+      <Image
+        src={trainingWalk}
+        alt="A trainer walking a small black dog on a leash indoors"
+        width={800}
+        class="tall"
+      />
     </div>
   </section>
-
 </Base>

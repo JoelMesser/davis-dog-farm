@@ -1,18 +1,23 @@
 ---
 /**
- * Get involved page (/get-involved/).
- * Sections: foster → volunteer → donate (with note keywords for directing a
- * gift) → wish list → events → memorial wall.
+ * Get involved page (/get-involved/): every way to help that isn't adopting.
  *
- * Section ids (#foster, #volunteer, #donate, #wish-list, #events, #memorial)
- * are linked from other pages and from public/_redirects. Keep them stable.
+ * Sections: foster → volunteer → donate → wish list → shop → events →
+ * memorial wall.
  *
- * To add a pet to the memorial wall: put a square-ish photo in
+ * Section ids are part of the public URL surface: other pages and
+ * public/_redirects link to #foster, #volunteer, #wish-list, #shop, #events
+ * and #memorial. Renaming one breaks those links, so treat ids like an API.
+ *
+ * To add a pet to the memorial wall, add a roughly square photo to
  * src/assets/images/, import it below, and add a <figure> to .memorial.
  */
-import Base from "../layouts/Base.astro";
 import { Image } from "astro:assets";
-import { donateUrl, applicationUrls, mailto, email, facebookUrl } from "../data/site";
+
+import Base from "../layouts/Base.astro";
+
+import { donateUrl, applicationUrls, mailto, email, facebookUrl, shopUrl } from "../data/site";
+
 import dogCouch from "../assets/images/dog-couch.jpg";
 import dogRottie from "../assets/images/dog-rottie.jpg";
 import puppyChewToy from "../assets/images/puppy-chew-toy.jpg";
@@ -21,6 +26,7 @@ import memorialSaber from "../assets/images/memorial-saber.jpg";
 import memorialBalto from "../assets/images/memorial-balto.jpg";
 import memorialLilly from "../assets/images/memorial-lilly.jpg";
 ---
+
 <Base
   title="Get involved | Davis Dog Farm"
   description="Foster, volunteer, donate, or shop our wish list to help Davis Dog Farm rescue dogs."
@@ -28,7 +34,10 @@ import memorialLilly from "../assets/images/memorial-lilly.jpg";
   <section class="page-head">
     <div class="wrap">
       <h1>Get involved</h1>
-      <p>Fostering, volunteering, donating, shopping our wish list: there are lots of ways to help a dog on its way home.</p>
+      <p>
+        Fostering, volunteering, donating, shopping our wish list: there are lots of ways to help a
+        dog on its way home.
+      </p>
     </div>
   </section>
 
@@ -36,14 +45,27 @@ import memorialLilly from "../assets/images/memorial-lilly.jpg";
     <div class="wrap split">
       <div>
         <h2>Foster a dog</h2>
-        <p>Most of our dogs live in foster homes, not kennels. Fosters give a dog a place to recover and get used to family life, which makes them much easier to place in a forever home.</p>
+        <p>
+          Most of our dogs live in foster homes, not kennels. Fosters give a dog a place to recover
+          and get used to family life, which makes them much easier to place in a forever home.
+        </p>
         <p>Do you have room in your home? Fill out the application and we’ll be in touch.</p>
-        <p class="small muted">All fosters must agree to a background check, or provide a current PA State Criminal Record Check and PA Child Abuse Clearance.</p>
+        <p class="small muted">
+          All fosters must agree to a background check, or provide a current PA State Criminal
+          Record Check and PA Child Abuse Clearance.
+        </p>
         <div class="actions">
-          <a class="btn btn-primary" href={applicationUrls.foster}>Apply to foster</a>
+          <a class="btn btn-primary" href={applicationUrls.foster}>
+            Apply to foster
+          </a>
         </div>
       </div>
-      <Image src={dogCouch} alt="A happy brown dog sitting by a couch in a foster home" width={800} class="tall" />
+      <Image
+        src={dogCouch}
+        alt="A happy brown dog sitting by a couch in a foster home"
+        width={800}
+        class="tall"
+      />
     </div>
   </section>
 
@@ -52,31 +74,60 @@ import memorialLilly from "../assets/images/memorial-lilly.jpg";
       <div>
         <h2>Volunteer</h2>
         <div class="notice">
-          <p>Right now we’re only taking volunteer applications for <strong>transport, events, dog walking, and odds and ends</strong> (cleaning and organizing).</p>
+          <p>
+            Right now we’re only taking volunteer applications for{" "}
+            <strong>transport, events, dog walking, and odds and ends</strong> (cleaning and
+            organizing).
+          </p>
         </div>
         <p class="note">Apply and our volunteer coordinator will get in touch.</p>
-        <p class="small muted">All volunteers must agree to a background check, or provide a current PA State Criminal Record Check and PA Child Abuse Clearance.</p>
+        <p class="small muted">
+          All volunteers must agree to a background check, or provide a current PA State Criminal
+          Record Check and PA Child Abuse Clearance.
+        </p>
         <div class="actions">
-          <a class="btn btn-primary" href={applicationUrls.volunteer}>Apply to volunteer</a>
+          <a class="btn btn-primary" href={applicationUrls.volunteer}>
+            Apply to volunteer
+          </a>
         </div>
       </div>
-      <Image src={dogRottie} alt="A Rottweiler looking up with soulful eyes" width={800} class="tall" />
+      <Image
+        src={dogRottie}
+        alt="A Rottweiler looking up with soulful eyes"
+        width={800}
+        class="tall"
+      />
     </div>
   </section>
 
   <section class="section section-sky" id="donate">
     <div class="wrap">
       <h2>Donate</h2>
-      <p>As a 501(c)(3), we rely on our supporters. From medical care to food to toys, every dollar makes a difference for one of our dogs.</p>
+      <p>
+        As a 501(c)(3), we rely on our supporters. From medical care to food to toys, every dollar
+        makes a difference for one of our dogs.
+      </p>
       <p>You can direct your gift by adding a note in PayPal:</p>
       <ul class="checklist">
-        <li><strong>Hope for Healing</strong> for medical care (<a href="/hope-for-healing/">about the fund</a>)</li>
-        <li><strong>Training</strong> to send a dog to school</li>
-        <li><strong>Wish list</strong> for supplies</li>
-        <li><strong>In memory of</strong> or <strong>in honor of</strong> and your pet’s name, for the memorial wall below</li>
+        <li>
+          <strong>Hope for Healing</strong> for medical care (
+          <a href="/hope-for-healing/">about the fund</a>)
+        </li>
+        <li>
+          <strong>Training</strong> to send a dog to school
+        </li>
+        <li>
+          <strong>Wish list</strong> for supplies
+        </li>
+        <li>
+          <strong>In memory of</strong> or <strong>in honor of</strong> and your pet’s name, for the
+          memorial wall below
+        </li>
       </ul>
       <div class="actions">
-        <a class="btn btn-donate" href={donateUrl}>Donate with PayPal</a>
+        <a class="btn btn-donate" href={donateUrl}>
+          Donate with PayPal
+        </a>
       </div>
     </div>
   </section>
@@ -85,36 +136,86 @@ import memorialLilly from "../assets/images/memorial-lilly.jpg";
     <div class="wrap split">
       <div>
         <h2>Wish list</h2>
-        <p>Our dogs always need tough chews. Buying through Ruff Enough supports the rescue, or you can donate with the note “wish list” and we’ll buy what’s needed most.</p>
+        <p>
+          Our dogs always need tough chews. Buying through Ruff Enough supports the rescue, or you
+          can donate with the note “wish list” and we’ll buy what’s needed most.
+        </p>
         <div class="actions">
-          <a class="btn btn-primary" href="https://ruffenough.com/?sca_ref=566440.tI2Lap9kRV">Shop Ruff Enough chews</a>
-          <a class="btn btn-plain" href={donateUrl}>Donate to the wish list</a>
+          <a class="btn btn-primary" href="https://ruffenough.com/?sca_ref=566440.tI2Lap9kRV">
+            Shop Ruff Enough chews
+          </a>
+          <a class="btn btn-plain" href={donateUrl}>
+            Donate to the wish list
+          </a>
         </div>
       </div>
-      <Image src={puppyChewToy} alt="A puppy lying on a bed with a chew toy" width={512} class="tall" />
+      <Image
+        src={puppyChewToy}
+        alt="A puppy lying on a bed with a chew toy"
+        width={512}
+        class="tall"
+      />
+    </div>
+  </section>
+
+  <section class="section section-sky" id="shop">
+    <div class="wrap">
+      <h2>Shop</h2>
+      <p>
+        Wear your support with Davis Dog Farm logo hats, t-shirts and hoodies. We also sell a
+        no-escape, no-pull harness lead.
+      </p>
+      <div class="actions">
+        <a class="btn btn-primary" href={shopUrl}>
+          Visit our shop
+        </a>
+      </div>
     </div>
   </section>
 
   <section class="section" id="events">
     <div class="wrap">
       <h2>Events and fundraisers</h2>
-      <p>We hold adoption events and fundraisers through the year, like Bark at the Park, with adoptable dogs, food trucks and vendors. New events are posted on our Facebook page first.</p>
+      <p>
+        We hold adoption events and fundraisers through the year, like Bark at the Park, with
+        adoptable dogs, food trucks and vendors. New events are posted on our Facebook page first.
+      </p>
       <div class="actions">
-        <a class="btn btn-plain" href={facebookUrl}>See upcoming events on Facebook</a>
+        <a class="btn btn-plain" href={facebookUrl}>
+          See upcoming events on Facebook
+        </a>
       </div>
-      <p class="small muted note">Want to be a vendor? Email <a href={mailto}>{email}</a>.</p>
+      <p class="small muted note">
+        Want to be a vendor? Email <a href={mailto}>{email}</a>.
+      </p>
     </div>
   </section>
 
   <section class="section section-white" id="memorial">
     <div class="wrap">
       <h2>Memorial wall</h2>
-      <p>Honor a pet you’ve loved and lost. Make a donation with the note “in memory of” (or “in honor of”) and your pet’s name, and we’ll add them here. Your gift helps another dog in need.</p>
+      <p>
+        Honor a pet you’ve loved and lost. Make a donation with the note “in memory of” (or “in
+        honor of”) and your pet’s name, and we’ll add them here. Your gift helps another dog in
+        need.
+      </p>
       <div class="memorial">
-        <figure><Image src={memorialTank} alt="Tank D" width={360} /><figcaption>Tank D.</figcaption></figure>
-        <figure><Image src={memorialSaber} alt="Saber W" width={360} /><figcaption>Saber W.</figcaption></figure>
-        <figure><Image src={memorialBalto} alt="Balto M" width={360} /><figcaption>Balto M.</figcaption></figure>
-        <figure><Image src={memorialLilly} alt="Lilly" width={360} /><figcaption>Lilly</figcaption></figure>
+        <figure>
+          <Image src={memorialTank} alt="Tank D" width={360} />
+          <figcaption>Tank D.</figcaption>
+        </figure>
+        <figure>
+          <Image src={memorialSaber} alt="Saber W" width={360} />
+          <figcaption>Saber W.</figcaption>
+        </figure>
+        <figure>
+          <Image src={memorialBalto} alt="Balto M" width={360} />
+          <figcaption>Balto M.</figcaption>
+        </figure>
+        <figure>
+          <Image src={memorialLilly} alt="Lilly" width={360} />
+          <figcaption>Lilly</figcaption>
+        </figure>
       </div>
     </div>
   </section>

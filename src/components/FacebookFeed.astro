@@ -1,0 +1,92 @@
+---
+/**
+ * The rescue's latest Facebook posts, via Facebook's official Page Plugin.
+ * https://developers.facebook.com/docs/plugins/page-plugin
+ *
+ * Why this approach: Facebook is where the rescue actually publishes news
+ * (about 18K followers, posts several times a week). Embedding
+ * the page keeps the site current without anyone updating it twice. The
+ * alternative, pulling posts through the Graph API and rendering them
+ * ourselves, would need a Meta developer app and a page-admin access token
+ * that expires. That's a maintenance burden a volunteer-run rescue shouldn't
+ * carry for a news feed.
+ *
+ * Known trade-offs, accepted deliberately:
+ * - Facebook's markup inside the iframe has accessibility issues we can't
+ *   fix (axe runs should exclude `.fb-feed iframe`).
+ * - It loads Meta's scripts and cookies. loading="lazy" limits that to
+ *   visitors who scroll near it, and keeps it off the critical path, so it
+ *   doesn't affect first-load performance.
+ * - Some browsers and ad blockers hide Facebook embeds entirely, so a plain
+ *   link is always rendered underneath.
+ *
+ * Usage: <FacebookFeed /> or <FacebookFeed height={600} />
+ */
+import { facebookUrl } from "../data/site";
+
+interface Props {
+  /** Height in pixels. Posts scroll inside the embed. */
+  height?: number;
+}
+
+const { height = 700 } = Astro.props;
+
+// Every plugin option except `width`, which the client script adds (see below).
+// "timeline" is the posts tab. The "events" tab is intentionally not used:
+// the rescue announces events as ordinary posts, so that tab is always empty.
+const params = new URLSearchParams({
+  href: facebookUrl,
+  tabs: "timeline",
+  height: String(height),
+  small_header: "true",
+  hide_cover: "false",
+  show_facepile: "false",
+});
+const baseSrc = `https://www.facebook.com/plugins/page.php?${params}`;
+---
+
+<div class="fb-feed">
+  <!-- No src yet: the script below sets it once the column width is known. -->
+  <iframe
+    data-src={baseSrc}
+    title="Latest posts from our Facebook page"
+    height={height}
+    loading="lazy"
+    allow="encrypted-media; clipboard-write; web-share"
+    style={`--fb-height: ${height}px`}
+  ></iframe>
+  <p class="small muted note">
+    Don’t see it? <a href={facebookUrl}>Open our Facebook page</a>.
+  </p>
+</div>
+
+<script>
+  /*
+   * The plugin draws at the exact pixel width passed in its URL (180–500px)
+   * and never re-flows, so a fixed width would either overflow a phone or
+   * leave a gap on desktop. Instead we measure the column, then set `src`.
+   *
+   * Lazy loading still applies: for an iframe with loading="lazy", the
+   * browser defers the fetch until it's near the viewport, even when `src`
+   * is assigned from script.
+   */
+  document.querySelectorAll<HTMLIFrameElement>(".fb-feed iframe[data-src]").forEach((frame) => {
+    const width = Math.round(Math.min(500, Math.max(180, frame.clientWidth)));
+    frame.src = `${frame.dataset.src}&width=${width}`;
+  });
+</script>
+
+<style>
+  .fb-feed {
+    width: 100%;
+    max-width: 500px; /* the plugin's maximum width */
+  }
+  iframe {
+    display: block;
+    width: 100%;
+    height: var(--fb-height);
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--paper);
+  }
+</style>

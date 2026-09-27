@@ -1,20 +1,25 @@
 ---
 /**
  * About & contact page (/about/).
+ *
  * Sections: about the rescue → temporary foster for service members →
  * partners → contact details.
  *
- * Contact details come from src/data/site.ts. Section ids (#military,
- * #partners, #contact) are targets of public/_redirects.
+ * Contact details come from src/data/site.ts; don't retype them here.
+ * #partners and #contact are targets of public/_redirects, so keep those ids.
  */
-import Base from "../layouts/Base.astro";
 import { Image } from "astro:assets";
+
+import Base from "../layouts/Base.astro";
+
 import { mailto, email, facebookUrl, mapsUrl, address } from "../data/site";
+
 import dogAutumnLeaves from "../assets/images/dog-autumn-leaves.jpg";
 import adoptMeSnow2 from "../assets/images/adopt-me-snow-2.jpg";
 import partnerMaxxK9 from "../assets/images/partner-maxx-k9.jpg";
 import partnerHereHannah from "../assets/images/partner-here-hannah.jpg";
 ---
+
 <Base
   title="About & contact | Davis Dog Farm"
   description="About Davis Dog Farm, an all-breed foster-based dog rescue in Grantville, PA. Contact info and partners."
@@ -23,10 +28,24 @@ import partnerHereHannah from "../assets/images/partner-here-hannah.jpg";
     <div class="wrap split">
       <div>
         <h1>About us</h1>
-        <p>Davis Dog Farm Inc. is a nonprofit, all-breed dog rescue in Grantville, PA, founded in 2021.</p>
-        <p>We take in dogs from local shelter partners, high-kill shelters in nearby states, owner surrenders, and other rescues that need help. Most of our dogs live in foster homes so they can get used to family life instead of waiting in a kennel. Some also get training to improve their chances of finding a forever home.</p>
+        <p>
+          Davis Dog Farm Inc. is a nonprofit, all-breed dog rescue in Grantville, PA, founded in
+          2021.
+        </p>
+        <p>
+          We take in dogs from local shelter partners, high-kill shelters in nearby states, owner
+          surrenders, and other rescues that need help. Most of our dogs live in foster homes so
+          they can get used to family life instead of waiting in a kennel. Some also get training to
+          improve their chances of finding a forever home.
+        </p>
       </div>
-      <Image src={dogAutumnLeaves} alt="A happy black and tan dog standing in autumn leaves" width={800} class="tall" loading="eager" />
+      <Image
+        src={dogAutumnLeaves}
+        alt="A happy black and tan dog standing in autumn leaves"
+        width={800}
+        class="tall"
+        loading="eager"
+      />
     </div>
   </section>
 
@@ -34,9 +53,14 @@ import partnerHereHannah from "../assets/images/partner-here-hannah.jpg";
     <div class="wrap split flip">
       <div>
         <h2>Temporary foster for service members</h2>
-        <p>If you’re in the military, or your job sends you overseas, we can place your dog in a foster home until you’re back in the States. Thank you for your service.</p>
+        <p>
+          If you’re in the military, or your job sends you overseas, we can place your dog in a
+          foster home until you’re back in the States. Thank you for your service.
+        </p>
         <div class="actions">
-          <a class="btn btn-plain" href={`${mailto}?subject=Temporary%20foster`}>Email us about temporary foster</a>
+          <a class="btn btn-plain" href={`${mailto}?subject=Temporary%20foster`}>
+            Email us about temporary foster
+          </a>
         </div>
       </div>
       <Image src={adoptMeSnow2} alt="A dog in a vest standing in the snow" width={800} />
@@ -64,19 +88,34 @@ import partnerHereHannah from "../assets/images/partner-here-hannah.jpg";
   <section class="section section-ink" id="contact">
     <div class="wrap">
       <h2>Contact us</h2>
-      <p class="muted">Visits are by appointment only. Please don’t come to any location without one. If you want to meet a dog, <a href="/adopt/">apply first</a> and we’ll reach out.</p>
+      <p class="muted">
+        Visits are by appointment only. Please don’t come to any location without one. If you want
+        to meet a dog, <a href="/adopt/">apply first</a> and we’ll reach out.
+      </p>
       <div class="contact-grid">
         <div>
           <h3>Email</h3>
-          <p><a href={mailto}>{email}</a></p>
+          <p>
+            <a href={mailto}>{email}</a>
+          </p>
         </div>
         <div>
           <h3>Address</h3>
-          <p>{address.street}<br>{address.cityStateZip}<br><a href={mapsUrl}>Get directions</a></p>
+          <p>
+            {address.street}
+            <br />
+            {address.cityStateZip}
+            <br />
+            <a href={mapsUrl}>Get directions</a>
+          </p>
         </div>
         <div>
           <h3>Hours</h3>
-          <p>9 am to 7 pm, by appointment<br><a href={facebookUrl}>Message us on Facebook</a></p>
+          <p>
+            9 am to 7 pm, by appointment
+            <br />
+            <a href={facebookUrl}>Message us on Facebook</a>
+          </p>
         </div>
       </div>
     </div>
