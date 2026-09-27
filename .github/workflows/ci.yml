@@ -1,0 +1,35 @@
+# Runs on every push and pull request. Cloudflare Pages deploys independently;
+# this workflow is the gate that keeps master formatted, type-safe and buildable.
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - run: npm ci
+
+      - name: Formatting
+        run: npm run format:check
+
+      - name: Type check
+        run: npm run check
+
+      - name: Build
+        run: npm run build
